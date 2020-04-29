@@ -1,0 +1,89 @@
+@charset "utf-8";
+/**
+ * 隐藏元素
+ */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/**
+ * 清除浮动
+ */
+
+.clear {
+  clear: both;
+}
+
+
+/**
+ * 解決高度塌陷問題
+ */
+
+.clearfix:after {
+  content: ' ';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.clearfix {
+  zoom: 1;
+}
+
+
+/**
+ * 单行文本超过宽度显示为三个点
+ */
+
+.dot {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/**
+* 边框
+**/
+
+@mixin border-1px($color, $pos) {
+  position: relative;
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+
+    @each $item in $pos {
+      border-#{$item}: 1px solid $color;
+      #{$item}: 0;
+    }
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio:1.5),
+(min-device-pixel-ratio: 1.5) {
+  .border-1px &::after {
+    -webkit-transform: scaleY(0.7);
+    transform: scaleY(0.7);
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio:2),
+(min-device-pixel-ratio: 2) {
+  .border-1px &::after {
+    -webkit-transform: scaleY(0.5); //像素比为2的时候，我们设置缩放为0.5
+    transform: scaleY(0.5);
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio:3),
+(min-device-pixel-ratio: 3) {
+  .border-1px &::after {
+    -webkit-transform: scaleY(0.333333); //像素比为3的时候，我们设置缩放为0.33333
+    transform: scaleY(0.333333);
+  }
+}

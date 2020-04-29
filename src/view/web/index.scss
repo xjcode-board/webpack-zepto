@@ -1,0 +1,24 @@
+.title{
+    font-size:36px;
+    color: #333;
+    text-align: center; 
+    
+}
+
+#list {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    li{
+        width: 670px;
+        height:auto;
+        padding: 40px;
+        margin-bottom: 40px;
+        border-radius: 10px;
+        border:1Px solid #eee;
+        font-size:32px;
+        color: #000;
+    }
+}
