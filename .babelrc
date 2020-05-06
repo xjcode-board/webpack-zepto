@@ -1,6 +1,13 @@
 {
     "presets": [
-        "@babel/preset-env"
-    ],
-    "plugins":["@babel/plugin-transform-runtime","@babel/plugin-proposal-class-properties"]
-}
+       ["@babel/preset-env"]
+     ],
+      "plugins": [
+         [ 
+         "@babel/plugin-transform-runtime", {
+                  "corejs": 3
+               }
+           ]
+      ]
+  }
+  
