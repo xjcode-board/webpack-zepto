@@ -4,11 +4,11 @@
 
 ## 功能
 
-    1. es6/es7  //新语法还是很香的^_^
-    2. zepto/jquery //移动端建议用zepto,在不选用mvvm框架的情况下，操作dom还是我们的$最方便
-    3. lib-flexible + rem //移动端适配
-    4. html模板引擎pug  //纯粹为了偷懒，少写嵌套闭合标签，如果想用回html记得修改webpack.base.js
-    5. env-cmd 自定义环境打包
+    1. es6/es7  
+    2. zepto/jquery 
+    3. lib-flexible + rem 
+    4. html模板引擎pug  //如果想用html记得修改webpack.base.js
+    5. env-cmd //自定义环境打包
 
 ## 目录
 
