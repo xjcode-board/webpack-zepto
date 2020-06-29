@@ -1,7 +1,8 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const glob = require('glob')
- 
+const webpack = require('webpack')
+
 //多入口
 const entries = getEntries('src/view/**/index.js');
 let htmlPlugins = []
@@ -23,14 +24,10 @@ function getEntries(globPath) {
 Object.keys(entries).forEach(function (name) {
     let plugin = new HtmlWebpackPlugin({
         filename: name + '.html',
-        template: "src/view/" + name + "/index.pug",
+        template: "src/view/" + name + "/index.html",
         inject: true,
         chunks: ['common', 'vender', name],
-        minify:{
-            minifyCSS:true,
-            minifyJS:true,
-            removeComments:true
-        }
+        minify: false
     });
     htmlPlugins.push(plugin)
 })
@@ -45,7 +42,7 @@ module.exports = {
         },
     },
     output: {
-        path: path.resolve(__dirname, '../dist')  
+        path: path.resolve(__dirname, '../dist')
     },
     module: {
         rules: [
@@ -53,11 +50,14 @@ module.exports = {
             {
                 test: /\.(htm|html)$/,
                 use: [{
-                    loader: 'html-withimg-loader',
+                    loader: 'html-loader',
                 }, ],
             },
             //支持pug
-            { test: /\.pug$/, loader:['raw-loader','pug-html-loader']},
+            {
+                test: /\.pug$/,
+                loader: ['raw-loader', 'pug-html-loader']
+            },
             //支持ts
             {
                 test: /\.tsx?$/,
@@ -73,14 +73,25 @@ module.exports = {
             },
             {
                 test: /\.(jpe?g|png|gif)$/,
-                use: {
+                use: [{
                     loader: 'url-loader',
                     options: {
                         name: '[name].[ext]?[hash]',
                         outputPath: 'images/',
                         limit: 4096
                     }
-                }
+                }, {
+                    loader: 'img-loader',
+                    options: {
+                        plugins: [
+                            require('imagemin-pngquant')({
+                                floyd: 0.5,
+                                speed: 2,
+                                quality:[0.5,0.8]
+                            })
+                        ]
+                    }
+                }]
             },
             {
                 test: /\.(eot|ttf|svg)$/,
@@ -117,6 +128,9 @@ module.exports = {
         usedExports: true
     },
     plugins: [
-         ...htmlPlugins
+        ...htmlPlugins,
+        new webpack.DefinePlugin({
+            'process.env': JSON.stringify(require('./env.js')[process.env.NODE_ENV])
+        })
     ]
 }
