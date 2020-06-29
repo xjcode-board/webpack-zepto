@@ -65,10 +65,9 @@ module.exports = merge({
         open:true,
         hot:true,
         proxy:{
-            index:'',
-            'api/':{
-                target:'https://api.com',
-                secure:false,
+            '/api/':{
+                target:'https://cnodejs.org',
+                secure:true,
                 changeOrigin:true
             }
         }

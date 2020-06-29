@@ -9,9 +9,8 @@ import weui from "weui.js"
  */
 export default class Util {
     constructor() {
-        this.baseUrl = 'https://cnodejs.org/api/v1'
+        this.baseUrl = process.env.host + '/api/v1'
         this.windowUrl = window.location.href
-        this.origin = window.location.origin
         this.params = this.getUrlParams()
         this.loading = null
     }
@@ -26,6 +25,11 @@ export default class Util {
             return a
         }, {})
     }
+
+    showToast(text) {
+        weui.toast(text, 2000);
+    }
+     
     showLoading() {
         this.loading = weui.loading('加载中...');
     }

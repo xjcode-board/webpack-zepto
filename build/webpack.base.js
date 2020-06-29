@@ -1,30 +1,27 @@
 const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const glob = require('glob')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 
-//多入口
-const entries = getEntries('src/view/**/index.js');
-let htmlPlugins = []
+let htmlPlugins = [],
+    entries = {},
+    entryFiles = glob.sync('src/view/**/*.js'),
+    tplFiles = glob.sync('src/view/**/*.{html,pug}')
 
-function getEntries(globPath) {
-    var files = glob.sync(globPath),
-        entries = {};
+entryFiles.forEach(function (filepath) {
+    let split = filepath.split('/');
+    let name = split[split.length - 2];
 
-    files.forEach(function (filepath) {
-        var split = filepath.split('/');
-        var name = split[split.length - 2];
+    entries[name] = './' + filepath;
+});
 
-        entries[name] = './' + filepath;
-    });
+tplFiles.forEach(function (filepath) {
+    let split = filepath.split('/');
+    let name = split[split.length - 2];
 
-    return entries;
-}
-
-Object.keys(entries).forEach(function (name) {
     let plugin = new HtmlWebpackPlugin({
         filename: name + '.html',
-        template: "src/view/" + name + "/index.html",
+        template: './' + filepath,
         inject: true,
         chunks: ['common', 'vender', name],
         minify: false
@@ -32,13 +29,14 @@ Object.keys(entries).forEach(function (name) {
     htmlPlugins.push(plugin)
 })
 
+
 module.exports = {
     entry: entries,
     resolve: {
-        extensions: ['.tsx', '.ts', '.js'],
         alias: {
             '@src': path.resolve(__dirname, '../src'),
             '@lib': path.resolve(__dirname, '../src/lib'),
+            '@assets': path.resolve(__dirname, '../src/assets')
         },
     },
     output: {
@@ -58,11 +56,6 @@ module.exports = {
                 test: /\.pug$/,
                 loader: ['raw-loader', 'pug-html-loader']
             },
-            //支持ts
-            {
-                test: /\.tsx?$/,
-                loader: 'awesome-typescript-loader'
-            },
             //es6-->es5
             {
                 test: /\.jsx?$/,
@@ -81,15 +74,27 @@ module.exports = {
                         limit: 4096
                     }
                 }, {
-                    loader: 'img-loader',
+                    loader: 'image-webpack-loader',
                     options: {
-                        plugins: [
-                            require('imagemin-pngquant')({
-                                floyd: 0.5,
-                                speed: 2,
-                                quality:[0.5,0.8]
-                            })
-                        ]
+                        mozjpeg: {
+                            progressive: true,
+                            quality: 65
+                        },
+                        // optipng.enabled: false will disable optipng
+                        optipng: {
+                            enabled: false,
+                        },
+                        pngquant: {
+                            quality: [0.65, 0.90],
+                            speed: 4
+                        },
+                        gifsicle: {
+                            interlaced: false,
+                        },
+                        // the webp option will enable WEBP
+                        webp: {
+                            quality: 75
+                        }
                     }
                 }]
             },

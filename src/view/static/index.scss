@@ -1,11 +1,14 @@
 #root{
    text-align: center;
+   height: 100vh;
+   background: url('~@assets/images/bg.jpg') no-repeat;
+   background-size: 100% auto ;
 }
 .title{
    height: 120px;
    line-height: 120px;
    text-align: center;
-   color: #333;
+   color: #fff;
    font-size: 36px;
 }
  
